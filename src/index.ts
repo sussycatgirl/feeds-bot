@@ -1,5 +1,5 @@
 import Surreal from 'surrealdb.js';
-import { Client } from "revolt.js";
+import { Client, Message } from "revolt.js";
 import Log75, { LogLevel } from 'log75';
 import { config } from "./config";
 
@@ -21,4 +21,53 @@ Promise.all([
 ])
 .then(async () => {
     logger.info(`Ready in ${Date.now() - now}ms!`);
+
+    process.on('SIGINT', () => {
+        process.stdin.resume();
+        logger.info('Received shutdown signal, disconnecting client');
+        client.websocket.disconnect();
+        process.exit(0);
+    });
+
+    commands.push((await import('./commands/ping')).default);
+
+    logger.done(`Registered ${commands.length} commands`);
 });
+
+client.on('message', async (message) => {
+    if (!client.user || !message.content || message.system?.type) return;
+
+    const RE_PREFIX_MENTION = new RegExp(`^ ?<@${client.user._id}> {0,2}`, 'g');
+    const match = message.content.match(RE_PREFIX_MENTION);
+    if (!match?.length) return;
+
+    const [cmdName, ...args] = message.content.substring(match[0].length).split(/ +/g);
+
+    const command = commands
+        .find(c => c.name == cmdName.toLowerCase() || c.aliases?.includes(cmdName.toLowerCase()));
+
+    if (command) {
+        logger.info(`Command => ${cmdName} ${args.join(' ')}`);
+
+        try {
+            await command.run(message, args, db);
+        } catch(e) {
+            logger.error(`Command execution for '${cmdName}' failed: ${e}`);
+            await message.channel?.sendMessage(`Command failed\n\`\`\`js\n${e}\n\`\`\``)
+                .catch(e => console.error(e));
+        }
+    }
+    else {
+        logger.info(`Ignoring invalid command ${cmdName}`);
+    }
+});
+
+type Command = {
+    name: string;
+    aliases?: string[];
+    run: (message: Message, args: string[], db: Surreal) => Promise<any>;
+}
+
+const commands: Command[] = [];
+
+export { Command }

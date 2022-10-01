@@ -17,7 +17,8 @@
     "isomorphic-ws": "^5.0.0",
     "log75": "^2.2.0",
     "revolt.js": "^6.0.18",
-    "surrealdb.js": "^0.5.0"
+    "surrealdb.js": "^0.5.0",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.23",
