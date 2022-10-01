@@ -4,6 +4,7 @@ import Log75, { LogLevel } from 'log75';
 import { config } from "./config";
 import { isManager } from './util';
 import STRINGS from './strings';
+import fetchFeeds from './fetchFeeds';
 
 const logger = new ((Log75 as any).default)(LogLevel.Debug) as Log75;
 const client = new Client({ });
@@ -22,6 +23,7 @@ Promise.all([
     }).then(() => logger.done('Connected to database')),
 ])
 .then(async () => {
+    await db.use('feeds-bot', 'feeds-bot');
     logger.info(`Ready in ${Date.now() - now}ms!`);
 
     process.on('SIGINT', () => {
@@ -32,12 +34,18 @@ Promise.all([
     });
 
     commands.push((await import('./commands/ping')).default);
+    commands.push((await import('./commands/list')).default);
+    commands.push((await import('./commands/add')).default);
 
     logger.done(`Registered ${commands.length} commands`);
+
+    setInterval(() => fetchFeeds(db, client), 1000 * 60);
+    await fetchFeeds(db, client);
 });
 
 client.on('message', async (message) => {
     if (!client.user || !message.content || message.system?.type) return;
+    if (!message.channel?.havePermission('SendMessage')) return;
 
     const RE_PREFIX_MENTION = new RegExp(`^ ?<@${client.user._id}> {0,2}`, 'g');
     const match = message.content.match(RE_PREFIX_MENTION);
@@ -82,4 +90,4 @@ enum CommandPrivilege {
 
 const commands: Command[] = [];
 
-export { Command, CommandPrivilege }
+export { Command, CommandPrivilege, logger }
