@@ -37,6 +37,7 @@ Promise.all([
     commands.push((await import('./commands/list')).default);
     commands.push((await import('./commands/add')).default);
     commands.push((await import('./commands/delete')).default);
+    commands.push((await import('./commands/help')).default);
 
     logger.done(`Registered ${commands.length} commands`);
 
@@ -53,6 +54,11 @@ client.on('message', async (message) => {
     if (!match?.length) return;
 
     const [cmdName, ...args] = message.content.substring(match[0].length).split(/ +/g);
+
+    if (!cmdName) {
+        logger.info('Received empty mention, sending short help text');
+        return await message.reply(`:wave: Hi there! Check out "@${client.user.username} help" to get started.`);
+    }
 
     const command = commands
         .find(c => c.name == cmdName.toLowerCase() || c.aliases?.includes(cmdName.toLowerCase()));
