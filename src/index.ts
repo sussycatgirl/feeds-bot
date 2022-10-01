@@ -2,6 +2,8 @@ import Surreal from 'surrealdb.js';
 import { Client, Message } from "revolt.js";
 import Log75, { LogLevel } from 'log75';
 import { config } from "./config";
+import { isManager } from './util';
+import STRINGS from './strings';
 
 const logger = new ((Log75 as any).default)(LogLevel.Debug) as Log75;
 const client = new Client({ });
@@ -50,6 +52,10 @@ client.on('message', async (message) => {
         logger.info(`Command => ${cmdName} ${args.join(' ')}`);
 
         try {
+            if (command.privilege == CommandPrivilege.Manager && !isManager(message)) {
+                return await message.reply(STRINGS.REQUIRE_MANAGER);
+            }
+
             await command.run(message, args, db);
         } catch(e) {
             logger.error(`Command execution for '${cmdName}' failed: ${e}`);
@@ -65,9 +71,15 @@ client.on('message', async (message) => {
 type Command = {
     name: string;
     aliases?: string[];
+    privilege: CommandPrivilege;
     run: (message: Message, args: string[], db: Surreal) => Promise<any>;
+}
+
+enum CommandPrivilege {
+    User,
+    Manager,
 }
 
 const commands: Command[] = [];
 
-export { Command }
+export { Command, CommandPrivilege }
