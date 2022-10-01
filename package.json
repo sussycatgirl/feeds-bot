@@ -1,0 +1,27 @@
+{
+  "name": "feeds-bot",
+  "version": "1.0.0",
+  "description": "",
+  "exports": "./index",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc-watch --onSuccess \"node --experimental-specifier-resolution=node dist\"",
+    "build": "tsc",
+    "start": "node --experimental-specifier-resolution=node dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "isomorphic-ws": "^5.0.0",
+    "log75": "^2.2.0",
+    "revolt.js": "^6.0.18",
+    "surrealdb.js": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.8.4"
+  }
+}
