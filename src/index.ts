@@ -36,6 +36,7 @@ Promise.all([
     commands.push((await import('./commands/ping')).default);
     commands.push((await import('./commands/list')).default);
     commands.push((await import('./commands/add')).default);
+    commands.push((await import('./commands/delete')).default);
 
     logger.done(`Registered ${commands.length} commands`);
 

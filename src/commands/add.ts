@@ -38,13 +38,14 @@ export default {
 
             const parser = new Parser();
             const feed = await parser.parseURL(url);
+            const feedId = ulid();
 
             const res = await yesNoMessage(
                 message.channel!,
                 message.author_id,
                 'Are you sure you want to subscribe to this RSS feed?',
                 feed.title,
-                'Feed added!',
+                `Feed added! ID: \`${feedId}\``,
                 'Not adding feed.',
             );
 
@@ -52,9 +53,8 @@ export default {
                 if (await countFeeds(message.channel_id, db) >= MAX_FEEDS_PER_CHANNEL)
                 return message.reply(`This channel already has too many subscriptions! Please delete some before adding more.`);
 
-                const feedId = ulid();
                 await db.create(`feeds:${feedId}`, {
-                    id: feedId,
+                    feedId: feedId,
                     channel: message.channel_id,
                     url: url,
                     knownGuids: feed.items.filter(item => item.guid).map(item => item.guid),

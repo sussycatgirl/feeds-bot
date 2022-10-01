@@ -1,5 +1,5 @@
 export type DbFeed = {
-    id: string;
+    feedId: string;
     url: string;
     channel: string;
     errorRetryAt?: number;

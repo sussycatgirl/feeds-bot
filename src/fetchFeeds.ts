@@ -54,7 +54,7 @@ export default async (db: Surreal, client: Client) => {
                     if (delay) {
                         // Retry in X minutes
                         await db.query('UPDATE feeds SET errorCount = errorCount + 1, errorRetryAt = $retryAt WHERE (id == $id);', {
-                            id: feed.id,
+                            id: feed.feedId,
                             retryAt: Date.now() + (delay * 1000 * 60) - 10000,
                         });
 
