@@ -1,8 +1,8 @@
-import Parser from "rss-parser";
 import Surreal from "surrealdb.js";
 import { ulid } from "ulid";
 import { Command, CommandPrivilege, logger } from "..";
 import { DbFeed } from "../types/DbFeed";
+import FeedParser from "../types/FeedParser";
 import { yesNoMessage } from "../util";
 
 const MAX_FEEDS_PER_CHANNEL = 5;
@@ -36,7 +36,7 @@ export default {
                 if (!message.channel?.havePermission('React'))
                     return await message.reply(`I need "React" permission to post in this channel.`);
 
-            const parser = new Parser();
+            const parser = new FeedParser();
             const feed = await parser.parseURL(url);
             const feedId = ulid();
 

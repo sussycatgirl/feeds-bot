@@ -3,6 +3,7 @@ import Parser from "rss-parser";
 import Surreal from "surrealdb.js";
 import { logger } from ".";
 import { DbFeed } from "./types/DbFeed";
+import FeedParser from "./types/FeedParser";
 
 export default async (db: Surreal, client: Client) => {
     logger.info('Fetching feeds');
@@ -20,7 +21,7 @@ export default async (db: Surreal, client: Client) => {
         }
 
         for (const url of toFetch) {
-            const parser = new Parser({ timeout: 10000 });
+            const parser = new FeedParser();
             promises.push(parser.parseURL(url));
         }
 
