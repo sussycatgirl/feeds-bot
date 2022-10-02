@@ -72,15 +72,32 @@ export default async (db: Surreal, client: Client) => {
                 else {
                     for (const item of data.items) {
                         if (!item.guid || feed.knownGuids?.includes(item.guid)) continue;
+
+                        // Try to extract image URL from content
+                        //const imageLink = item.content
+                        //    ?.match(/https?:\/\/\S+\/\S+\.(png|jpg|gif|mp4)/)
+                        //    ?.filter(url => {
+                        //        try {
+                        //            new URL(url);
+                        //            return true;
+                        //        } catch(_) { return false }
+                        //    })
+                        //    ?.map(url => url.endsWith('"') ? url.substring(0, url.length - 2) : url)
+                        //    // Reddit 403's us on preview.redd.it but not on i.redd.it???
+                        //    ?.map(url => url.replace(/^https:\/\/preview.redd.it\//, 'https://i.redd.it/'))
+                        //    ?.[0];
+
                         await channel.sendMessage({
                             embeds: [{
                                 title: [data.title, item.title, item.creator].filter((i) => i).join(' • ').substring(0, 100),
                                 icon_url: data.image?.url,
                                 url: item.link,
-                                description: `${(item.contentSnippet || item.summary || item.content)?.split('\n')?.[0] ?? ''}\n\n[Read more](${item.link})`
+                                description: `${(item.contentSnippet || item.summary || item.content)?.split('\n')?.[0] ?? ''}\n\n`
+                                    + `[Read more](${item.link})`
                                     .substring(0, 2000),
                                 colour: 'var(--primary-background)',
                             }],
+                            content: item.link ? `[](${item.link})` : null, // Embed item if possible
                         });
 
                         await db.query('UPDATE feeds SET knownGuids += $guid, errorCount = 0 WHERE (url == $url && channel == $channel);', {
