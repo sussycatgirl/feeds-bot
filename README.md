@@ -1,6 +1,6 @@
 # Feeds
 
-Feeds is a simple Revolt bot that delivers RSS feeds to your text channels. You can invite it [here](https://revolt.chat/bot/01FWVYTRQJE8HD70YB510538CN).
+Feeds is a simple Revolt bot that delivers RSS feeds to your text channels. You can invite it [here](https://app.revolt.chat/bot/01FWVYTRQJE8HD70YB510538CN).
 
 Feeds are refreshed once per minute, and if a feed fails to fetch the bot will notify the user and exponentially increase the retry delay.
 
