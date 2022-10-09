@@ -3,7 +3,7 @@ import Parser from "rss-parser";
 class FeedParser extends Parser<{}, { id?: string }> {
     constructor() {
         super({
-            timeout: 10000,
+            timeout: 30000,
             customFields: {
                 item: ['id']
             },
