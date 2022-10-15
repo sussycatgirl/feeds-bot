@@ -62,7 +62,7 @@ export default {
             }
         } catch(e) {
             logger.warn('Failed to parse RSS feed: ' + e);
-            return await message.reply(`Woops, looks like the URL you provided doesn't point to a valid RSS feed!`);
+            return await message.reply(`Whoops, looks like the URL you provided doesn't point to a valid RSS feed!`);
         }
     },
 } as Command;
