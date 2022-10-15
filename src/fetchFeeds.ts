@@ -49,7 +49,7 @@ export default async (db: Surreal, client: Client) => {
                 if (!data) continue;
 
                 if (data instanceof Error) {
-                    const retryDelays = [5, 10, 30, 60, 180, 24*60];
+                    const retryDelays = [2, 5, 10, 30, 60, 180, 24*60];
                     const delay = retryDelays[feed.errorCount ?? 0] || retryDelays[retryDelays.length - 1];
 
                     if (delay) {
@@ -59,14 +59,16 @@ export default async (db: Surreal, client: Client) => {
                             retryAt: Date.now() + (delay * 1000 * 60) - 10000,
                         });
 
-                        await channel.sendMessage({
-                            embeds: [{
-                                colour: 'var(--error)',
-                                title: feed.url,
-                                description: `Failed to fetch feed: ${data.message}\n\nRetrying <t:${Math.floor((Date.now() + (delay * 1000 * 60)) / 1000)}:R>.`,
-                                icon_url: 'https://materialdesignicons.com/api/download/45AA2B72-8538-41CB-BAD4-20C43E40D21C/FFFFFF/1/FFFFFF/0/48',
-                            }],
-                        });
+                        if (feed.errorCount ?? 0 > 0) {
+                            await channel.sendMessage({
+                                embeds: [{
+                                    colour: 'var(--error)',
+                                    title: feed.url,
+                                    description: `Failed to fetch feed: ${data.message}\n\nRetrying <t:${Math.floor((Date.now() + (delay * 1000 * 60)) / 1000)}:R>.`,
+                                    icon_url: 'https://materialdesignicons.com/api/download/45AA2B72-8538-41CB-BAD4-20C43E40D21C/FFFFFF/1/FFFFFF/0/48',
+                                }],
+                            });
+                        }
                     }
                 }
                 else {
