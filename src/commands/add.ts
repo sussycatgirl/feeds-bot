@@ -5,7 +5,7 @@ import { DbFeed } from "../types/DbFeed";
 import FeedParser from "../types/FeedParser";
 import { yesNoMessage } from "../util";
 
-const MAX_FEEDS_PER_CHANNEL = 5;
+const MAX_FEEDS_PER_CHANNEL = 20;
 
 const countFeeds = async (channel: string, db: Surreal): Promise<number> => {
     const [feedCountRes] = await db.query('SELECT count() FROM feeds WHERE (channel == $channel) GROUP BY ALL;', {
