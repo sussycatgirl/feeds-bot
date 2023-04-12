@@ -2,8 +2,9 @@ import prometheus from 'prom-client';
 import Surreal from 'surrealdb.js';
 import Express from 'express';
 import { logger } from '.';
+import { Client } from 'revolt.js';
 
-const setupProm = (db: Surreal) => {
+const setupProm = (db: Surreal, client: Client) => {
     const register = new prometheus.Registry();
 
     const metrics = {
@@ -20,6 +21,13 @@ const setupProm = (db: Surreal) => {
                     this.set(-1);
                 }
             },
+        }),
+        servers: new prometheus.Gauge({
+            name: 'feeds_servers',
+            help: 'Amount of servers the bot is a member of',
+            collect() {
+                this.set(client.servers.size);
+            }
         }),
     }
 

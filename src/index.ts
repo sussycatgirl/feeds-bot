@@ -11,7 +11,7 @@ const logger = new ((Log75 as any).default)(LogLevel.Debug) as Log75;
 const client = new Client({ });
 const db = new Surreal(config.SURREAL.URL);
 
-const metrics = setupProm(db);
+const metrics = setupProm(db, client);
 
 const now = Date.now();
 Promise.all([
