@@ -7,9 +7,9 @@ const setupProm = (db: Surreal) => {
     const register = new prometheus.Registry();
 
     const metrics = {
-        commands: new prometheus.Counter({ name: 'commands', help: 'Executed commands', labelNames: [ 'name' ] }),
+        commands: new prometheus.Counter({ name: 'feeds_commands', help: 'Executed commands', labelNames: [ 'name' ] }),
         subscriptions: new prometheus.Gauge({
-            name: 'subscriptions',
+            name: 'feeds_subscriptions',
             help: 'Total amount of RSS subscriptions',
             async collect() {
                 try {
