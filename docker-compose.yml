@@ -9,6 +9,7 @@ services:
       SURREAL_URL: ${SURREAL_URL:-http://db:8000/rpc}
       SURREAL_USER: ${SURREAL_USER:-root}
       SURREAL_PASS: ${SURREAL_PASS:-root}
+      PROMETHEUS_PORT: ${PROMETHEUS_PORT}
     depends_on:
       - db
 
