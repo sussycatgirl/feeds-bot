@@ -5,6 +5,7 @@ specifiers:
   dotenv: ^16.0.3
   isomorphic-ws: ^5.0.0
   log75: ^2.2.0
+  prom-client: ^14.2.0
   revolt.js: ^6.0.18
   rss-parser: ^3.12.0
   surrealdb.js: ^0.5.0
@@ -16,6 +17,7 @@ dependencies:
   dotenv: 16.0.3
   isomorphic-ws: 5.0.0
   log75: 2.2.0
+  prom-client: 14.2.0
   revolt.js: 6.0.18
   rss-parser: 3.12.0
   surrealdb.js: 0.5.0
@@ -85,6 +87,10 @@ packages:
       follow-redirects: 1.15.2
     transitivePeerDependencies:
       - debug
+    dev: false
+
+  /bintrees/1.0.2:
+    resolution: {integrity: sha512-VOMgTMwjAaUG580SXn3LacVgjurrbMme7ZZNYGSSV7mmtY6QQRh0Eg3pwIcntQ77DErK1L0NxkbetjcoXzVwKw==}
     dev: false
 
   /cross-spawn/7.0.3:
@@ -249,6 +255,13 @@ packages:
     dev: false
     optional: true
 
+  /prom-client/14.2.0:
+    resolution: {integrity: sha512-sF308EhTenb/pDRPakm+WgiN+VdM/T1RaHj1x+MvAuT8UiQP8JmOEbxVqtkbfR4LrvOg5n7ic01kRBDGXjYikA==}
+    engines: {node: '>=10'}
+    dependencies:
+      tdigest: 0.1.2
+    dev: false
+
   /ps-tree/1.2.0:
     resolution: {integrity: sha512-0VnamPPYHl4uaU/nSFeZZpR21QAWRz+sRv4iW9+v/GS/J5U5iZB5BNN6J0RMoOvdx2gWM2+ZFMIm58q24e4UYA==}
     engines: {node: '>= 0.10'}
@@ -343,6 +356,12 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /tdigest/0.1.2:
+    resolution: {integrity: sha512-+G0LLgjjo9BZX2MfdvPfH+MKLCrxlXSYec5DaPYP1fe6Iyhf0/fSmJ0bFiZ1F8BT6cGXl2LpltQptzjXKWEkKA==}
+    dependencies:
+      bintrees: 1.0.2
     dev: false
 
   /through/2.3.8:

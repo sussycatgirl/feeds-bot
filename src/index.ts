@@ -5,10 +5,13 @@ import { config } from "./config";
 import { isManager } from './util';
 import STRINGS from './strings';
 import fetchFeeds from './fetchFeeds';
+import { setupProm } from './prometheus';
 
 const logger = new ((Log75 as any).default)(LogLevel.Debug) as Log75;
 const client = new Client({ });
 const db = new Surreal(config.SURREAL.URL);
+
+const metrics = setupProm(db);
 
 const now = Date.now();
 Promise.all([
@@ -65,6 +68,7 @@ client.on('message', async (message) => {
 
     if (command) {
         logger.info(`Command => ${cmdName} ${args.join(' ')}`);
+        metrics.commands.inc({ name: command.name });
 
         try {
             if (command.privilege == CommandPrivilege.Manager && !isManager(message)) {
