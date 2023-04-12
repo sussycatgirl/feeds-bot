@@ -27,7 +27,7 @@ const setupProm = (db: Surreal) => {
         register.registerMetric(metric);
     }
 
-    prometheus.collectDefaultMetrics({ register });
+    prometheus.collectDefaultMetrics({ register, prefix: 'feeds_' });
 
     const port = Number(process.env.PROMETHEUS_PORT);
     if (isNaN(port)) {
