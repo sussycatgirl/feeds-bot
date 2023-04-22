@@ -1,8 +1,16 @@
 import { Channel, ClientboundNotification, Message } from "revolt.js";
 import { logger } from ".";
 
-const isManager = (message: Message) => !!message.member
-    ?.hasPermission(message.channel!, "ManageChannel");
+const isManager = (message: Message) => {
+    switch(message.channel?.channel_type) {
+        case 'DirectMessage': return true;
+        case 'Group': return true;
+        case 'TextChannel':
+        case 'VoiceChannel':
+            return !!message.member?.hasPermission(message.channel!, "ManageChannel");
+        default: return false;
+    }
+}
 
 const yesNoMessage = (
         channel: Channel,
