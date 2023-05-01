@@ -44,7 +44,7 @@ export default {
                 message.channel!,
                 message.author_id,
                 'Are you sure you want to subscribe to this RSS feed?',
-                feed.title,
+                (feed.title || url).substring(0, 127),
                 `Feed added! ID: \`${feedId}\``,
                 'Not adding feed.',
             );
